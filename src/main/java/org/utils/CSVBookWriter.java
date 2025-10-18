@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class CSVBookWriter {
 
-    public static void writeBooksToCSV(ArrayList<BookDTO> bookDTOS) throws IOException {
+    public static void writeBooksToCSV(ArrayList<BookDTO> bookDTOS) {
         try (FileWriter fileWriter = (new FileWriter("books.csv"))) {
             fileWriter.write("Title,Price,Link\n");
             for (BookDTO bookDTO : bookDTOS) {

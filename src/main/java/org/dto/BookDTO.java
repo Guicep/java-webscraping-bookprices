@@ -40,4 +40,8 @@ public class BookDTO {
     public String toString() {
         return this.title + " " + this.price + " " + this.link;
     }
+
+    public String toCSVString() {
+        return this.title + "," + this.author + "," + this.price + "," + this.link + "\n";
+    }
 }

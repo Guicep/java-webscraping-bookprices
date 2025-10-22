@@ -11,13 +11,7 @@ public class CSVBookWriter {
         try (FileWriter fileWriter = (new FileWriter("books.csv"))) {
             fileWriter.write("Title,Author,Price,Link\n");
             for (BookDTO bookDTO : bookDTOS) {
-                fileWriter.write(
-                        bookDTO.getTitle()
-                                +","+ bookDTO.getAuthor()
-                                +","+ bookDTO.getPrice()
-                                +","+ bookDTO.getLink()
-                                +"\n"
-                );
+                fileWriter.write(bookDTO.toCSVString());
             }
         } catch (Exception e) {
             e.printStackTrace();

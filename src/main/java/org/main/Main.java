@@ -1,34 +1,24 @@
 package org.main;
 
 import org.scrappers.BookWebScraper;
+import org.slf4j.LoggerFactory;
 import org.utils.CSVBookWriter;
 
-import java.util.Scanner;
+import org.slf4j.Logger;
+import org.utils.Input;
+import org.utils.InputReader;
 
 public class Main {
+
+    final static Logger log = LoggerFactory.getLogger(Main.class);
+
     public static void main(String[] args) {
         // INPUT
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter the author name: ");
-        String authorName = scanner.nextLine();
-        System.out.println("Enter the author surname: ");
-        String authorSurname = scanner.nextLine();
-        System.out.println("Enter the book title: ");
-        String title = scanner.nextLine();
-        scanner.close();
-
         try {
-            title = String.format("%s %s %s",title, authorName, authorSurname)
-                    .trim()
-                    .replaceAll("\\s+", " ")
-                    .replaceAll(" ", "+");
-            if (title.isEmpty()) {
-                throw new Exception("No fields were filled");
-            }
-            String authorFullName = String.format("%s, %s", authorSurname.toUpperCase(), authorName.toUpperCase());
-            CSVBookWriter.writeBooksToCSV(BookWebScraper.getBooks(authorFullName, title));
+            Input input = InputReader.getInput();
+            CSVBookWriter.writeBooksToCSV(BookWebScraper.getBooks(input.getAuthorFullName(), input.getFullTitle()));
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
     }
 }

@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 public class InputReader {
     public static Input getInput() throws Exception {
+
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter the author name: ");
         String authorName = scanner.nextLine();
@@ -13,12 +14,15 @@ public class InputReader {
         String title = scanner.nextLine();
         scanner.close();
 
-        if (title.isEmpty()) throw new Exception("Title field can't be empty");
-
         String fullTitle = String.format("%s %s %s",title, authorName, authorSurname)
                 .trim()
                 .replaceAll("\\s+", " ")
                 .replaceAll(" ", "+");
+
+        if (fullTitle.isEmpty()) {
+            throw new Exception("Title field can't be empty");
+        }
+
         String authorFullName = String.format("%s, %s", authorSurname.toUpperCase(), authorName.toUpperCase());
 
         return new Input(authorFullName, fullTitle);

@@ -13,7 +13,6 @@ public class Main {
     final static Logger log = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) {
-        // INPUT
         try {
             Input input = InputReader.getInput();
             CSVBookWriter.writeBooksToCSV(BookWebScraper.getBooks(input.getAuthorFullName(), input.getFullTitle()));

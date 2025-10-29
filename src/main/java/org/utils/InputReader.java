@@ -16,8 +16,7 @@ public class InputReader {
 
         String fullTitle = String.format("%s %s %s",title, authorName, authorSurname)
                 .trim()
-                .replaceAll("\\s+", " ")
-                .replaceAll(" ", "+");
+                .replaceAll("\\s+", " ");
 
         if (fullTitle.isEmpty()) {
             throw new Exception("Title field can't be empty");

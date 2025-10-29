@@ -12,11 +12,11 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class BookWebScraper {
+public class CuspideBookScraper {
 
     public static ArrayList<BookDTO> getBooks(String author, String title) throws Exception {
         ArrayList<BookDTO> books = new ArrayList<>();
-        String url = String.format("https://cuspide.com/?s=%s&post_type=product", title);
+        String url = String.format("https://cuspide.com/?s=%s&post_type=product", urlSearchParameters(title));
         Response response = Jsoup.connect(url).method(Method.GET).execute();
         Document document = Jsoup.parse(response.body());
         TimeUnit.SECONDS.sleep(2);
@@ -40,12 +40,12 @@ public class BookWebScraper {
             lastPage = document.select("i[class$=icon-angle-right]").isEmpty();
             if (! lastPage) {
                 page++;
-                url = String.format("https://cuspide.com/page/%d/?s=%s&post_type=product", page, title);
+                url = String.format("https://cuspide.com/page/%d/?s=%s&post_type=product", page, urlSearchParameters(title));
                 document = Jsoup.connect(url).get();
                 TimeUnit.SECONDS.sleep(2);
             }
         } while (! lastPage);
-
+        // Esto seria trabajo del que lo escribe, CSVWriter, etc.
         books.sort(Comparator.comparingDouble(BookDTO::getPrice));
 
         return books;
@@ -60,5 +60,9 @@ public class BookWebScraper {
                 .text();
 
         return new BookDTO(title, author, link, priceArs);
+    }
+
+    private static String urlSearchParameters(String parameters) {
+        return parameters.replaceAll(" ", "+");
     }
 }

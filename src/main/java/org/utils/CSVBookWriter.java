@@ -4,10 +4,14 @@ import org.dto.BookDTO;
 
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class CSVBookWriter {
 
     public static void writeBooksToCSV(ArrayList<BookDTO> bookDTOS) throws BookException {
+
+        bookDTOS.sort(Comparator.comparingDouble(BookDTO::getPrice));
+
         try (FileWriter fileWriter = (new FileWriter("books.csv"))) {
             fileWriter.write("Title,Author,Price,Link\n");
             for (BookDTO bookDTO : bookDTOS) {

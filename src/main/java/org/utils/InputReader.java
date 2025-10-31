@@ -22,8 +22,6 @@ public class InputReader {
             throw new Exception("Title field can't be empty");
         }
 
-        String authorFullName = String.format("%s, %s", authorSurname.toUpperCase(), authorName.toUpperCase());
-
-        return new Input(authorFullName, fullTitle);
+        return new Input(authorName, authorSurname, fullTitle);
     }
 }

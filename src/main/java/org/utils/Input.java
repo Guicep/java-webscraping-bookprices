@@ -1,16 +1,22 @@
 package org.utils;
 
 public class Input {
-    private String authorFullName;
+    private String authorName;
+    private String authorSurname;
     private String fullTitle;
 
-    public Input(String authorFullName, String fullTitle) {
-        this.authorFullName = authorFullName;
+    public Input(String authorName, String authorSurname, String fullTitle) {
+        this.authorName = authorName;
+        this.authorSurname = authorSurname;
         this.fullTitle = fullTitle;
     }
 
-    public String getAuthorFullName() {
-        return authorFullName;
+    public String getAuthorName() {
+        return authorName;
+    }
+
+    public String getAuthorSurname() {
+        return authorSurname;
     }
 
     public String getFullTitle() {

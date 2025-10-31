@@ -8,14 +8,14 @@ import java.util.Comparator;
 
 public class CSVBookWriter {
 
-    public static void writeBooksToCSV(ArrayList<BookDTO> bookDTOS) throws BookException {
+    public static void writeBooksToCSV(ArrayList<BookDTO> books) throws BookException {
 
-        bookDTOS.sort(Comparator.comparingDouble(BookDTO::getPrice));
+        books.sort(Comparator.comparingDouble(BookDTO::getPrice));
 
         try (FileWriter fileWriter = (new FileWriter("books.csv"))) {
             fileWriter.write("Title,Author,Price,Link\n");
-            for (BookDTO bookDTO : bookDTOS) {
-                fileWriter.write(bookDTO.toCSVString());
+            for (BookDTO book : books) {
+                fileWriter.write(book.toCSVString());
             }
         } catch (Exception e) {
             throw new BookException(e.getMessage());

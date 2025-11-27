@@ -20,42 +20,37 @@ public class CuspideBookScraper extends BookScraper {
 
     public ArrayList<BookDTO> getBooks(Input input) throws Exception {
         String authorFullName = this.formatAuthor(input.getAuthorName(), input.getAuthorSurname());
-        String url = String.format(
-                "https://cuspide.com/?s=%s&post_type=product", this.urlParameters(input.getFullTitle()));
-        Response response = Jsoup.connect(url).method(Method.GET).execute();
-        TimeUnit.SECONDS.sleep(2);
-        Document document = Jsoup.parse(response.body());
-        if (! document.select("body[class*=single-product]").isEmpty()) {
-            Elements bookAuthor = document.select("span > a[href]");
-            String author = (! bookAuthor.isEmpty())? bookAuthor.first().text() : "";
-            this.books.add(createBook(document, author, response.url().toString()));
-            return this.books;
-        }
-
-        int page = 1;
+        int page = 0;
         boolean lastPage;
+        System.out.print("Cuspide current page: | ");
         do {
+            String url = String.format(
+                    "https://cuspide.com/page/%d/?s=%s&post_type=product",
+                    ++page,
+                    this.urlParameters(input.getFullTitle())
+            );
+            System.out.print(page + " | ");
+            Response response = Jsoup.connect(url).method(Method.GET).execute();
+            Document document = Jsoup.parse(response.body());
+            if (! document.select("body[class*=single-product]").isEmpty()) {
+                Elements bookAuthor = document.select("span > a[href]");
+                String author = (! bookAuthor.isEmpty())? bookAuthor.first().text() : "";
+                this.books.add(createBook(document, author, response.url().toString()));
+                return books;
+            }
             Elements links = document.select("div[class^=product-small box] > div > div > a[href]");
             for (Element link : links) {
                 Document doc = Jsoup.connect(link.attr("href")).get();
+                TimeUnit.SECONDS.sleep(2);
                 Elements bookAuthor = doc.select("span > a[href]");
                 if (! bookAuthor.isEmpty() && bookAuthor.first().text().matches(".*" + authorFullName + ".*")) {
                     this.books.add(createBook(doc, bookAuthor.first().text(), link.attr("href")));
                 }
-                TimeUnit.SECONDS.sleep(2);
             }
             lastPage = document.select("i[class$=icon-angle-right]").isEmpty();
-            if (! lastPage) {
-                page++;
-                url = String.format(
-                        "https://cuspide.com/page/%d/?s=%s&post_type=product",
-                        page,
-                        this.urlParameters(input.getFullTitle())
-                );
-                document = Jsoup.connect(url).get();
-                TimeUnit.SECONDS.sleep(2);
-            }
+
         } while (! lastPage);
+        System.out.println();
 
         return this.books;
     }
